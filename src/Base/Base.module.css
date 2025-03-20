@@ -1,0 +1,12 @@
+.mainContent {
+  height: 100vh;
+  background-color: hsl(43, 100%, 96%);
+}
+
+p {
+  font-size: 3em;
+  text-align: center;
+  padding-top: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+}

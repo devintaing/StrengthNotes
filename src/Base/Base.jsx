@@ -1,23 +1,15 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import styles from './Base.module.css';
 
 const Base = () => {
-  const navigate = useNavigate();
-
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
-  const handleCreateAccountClick = () => {
-    navigate('/create-account');
-  };
 
   return (
     <div>
-      <h1>StrengthNotes</h1>
-      <button onClick={handleLoginClick}>Login</button>
-      <button onClick={handleCreateAccountClick}>Create Account</button>
+      <Header/>
+      <div className={styles.mainContent}>
+        <p>Easily track and visualize your workouts.</p>
+      </div>
     </div>
   );
 };

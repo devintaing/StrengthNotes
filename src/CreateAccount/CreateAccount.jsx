@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import styles from './CreateAccount.module.css';
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -23,8 +24,8 @@ const CreateAccount = () => {
 
   return (
     <div>
-      <h2>Create Account</h2>
-      <form onSubmit={handleCreateAccount}>
+      <form className={styles.loginForm} onSubmit={handleCreateAccount}>
+        <h2>Create Account</h2>
         <div>
           <label>Username:</label>
           <input
