@@ -4,9 +4,18 @@ import { getAuth, signOut } from 'firebase/auth';
 import styles from './Header.module.css';
 import logo from '../assets/logo.png';
 
-const Header = ({ isLoggedIn }) => {
+const Header = () => {
   const auth = getAuth();
   const navigate = useNavigate();
+
+  const isLoggedIn = () => {
+    if(auth.currentUser === null) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -47,7 +56,7 @@ const Header = ({ isLoggedIn }) => {
 
   return (
     <div>
-      {isLoggedIn ? renderLoggedInLinks() : renderLoggedOutLinks()}
+      {isLoggedIn() ? renderLoggedInLinks() : renderLoggedOutLinks()}
     </div>
   );
 };

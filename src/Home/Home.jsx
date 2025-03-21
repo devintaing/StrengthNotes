@@ -18,7 +18,7 @@ const Home = () => {
 
   return (
     <div>
-      <Header isLoggedIn={isLoggedIn()} />
+      <Header/>
       <h1>Welcome to StrengthNotes</h1>
     </div>
   );
