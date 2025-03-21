@@ -3,7 +3,7 @@
   background-color: hsl(43, 100%, 96%);
 }
 
-p {
+.splashText {
   font-size: 3em;
   text-align: center;
   padding-top: 50px;

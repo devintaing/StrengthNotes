@@ -8,7 +8,7 @@ const Base = () => {
     <div>
       <Header/>
       <div className={styles.mainContent}>
-        <p>Easily track and visualize your workouts.</p>
+        <p className={styles.splashText}>Easily track and visualize your workouts.</p>
       </div>
     </div>
   );
