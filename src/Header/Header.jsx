@@ -4,6 +4,12 @@ import { getAuth, signOut } from 'firebase/auth';
 import styles from './Header.module.css';
 import logo from '../assets/logo.png';
 
+/**
+ * TODO: fix weird bug where if the user is logged in and
+ * manually navigates to "/" it shows login/signup and then
+ * fixes itself when the user clicks on logo.
+ */
+
 const Header = () => {
   const auth = getAuth();
   const navigate = useNavigate();
