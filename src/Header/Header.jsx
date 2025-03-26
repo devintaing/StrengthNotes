@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 import styles from './Header.module.css';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.svg';
 
 /**
  * TODO: fix weird bug where if the user is logged in and

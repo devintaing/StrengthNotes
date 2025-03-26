@@ -1,27 +1,34 @@
 body {
-  background-color: hsl(43, 100%, 96%);
+  background-color: hsl(201, 100%, 96%);
 }
 
-.loginDiv {
+.authDiv {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.loginForm {
-  background-color: hsl(43, 100%, 86%);
+.authForm {
+  background-color: hsl(201, 100%, 86%);
   padding: 50px;
   margin-top: 50px;
   max-width: 50vw;
-  border-radius: 25px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
 }
 
-.loginTitle {
-  text-align: center;
+.authTitle {
+  font-weight: normal;
 }
 
-.userInput {
-  margin-top: 20px;
+.inputs {
+  display: grid;
+}
+
+input {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  margin-top: 15px;
 }
 
 .buttons {

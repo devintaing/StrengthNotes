@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div>
       <Header/>
-      <h1>Welcome to StrengthNotes</h1>
+      <h1>Welcome!</h1>
       <Link to="/workout">Start a workout</Link>
     </div>
   );

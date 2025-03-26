@@ -39,58 +39,83 @@ const Login = () => {
       navigate('/home'); // Redirect to home after account creation
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
-        setError('An account with that email already exists!');
+        setError('error: an account with that email already exists!');
       } else {
         setError(err.message);
       }
     }
   };
 
+  const renderLoginForm = () => (
+    <>
+      <form onSubmit={handleLogin} className={styles.authForm}>
+        <h2 className={styles.authTitle}>Login</h2>
+        {error && <p>{error}</p>}
+        <div className={styles.inputs}>
+          <input
+            type="email"
+            value={email}
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className={styles.buttons}>
+          <button type="submit">Login</button>
+          <button onClick={toggleForm}>Don't have an account?</button>
+        </div>
+      </form>
+    </>
+  )
+
+  const renderCreateAccountForm = () => (
+    <>
+      <form onSubmit={handleCreateAccount} className={styles.authForm}>
+      <h2 className={styles.authTitle}>Create Account</h2>
+        {error && <p>{error}</p>}
+        <div className={styles.inputs}>
+          <input
+            type="text"
+            value={displayName}
+            placeholder="Display Name"
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            value={email}
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className={styles.buttons}>
+          <button type="submit">Create Account</button>
+          <button onClick={toggleForm}>Already have an account?</button>
+        </div>
+      </form>
+    </>
+  )
+
   return (
     <div>
       <Header />
-      <div className={styles.loginDiv}>
-        <form onSubmit={isLogin ? handleLogin : handleCreateAccount} className={styles.loginForm}>
-          <h2 className={styles.loginTitle}>{isLogin ? 'Login' : 'Create an Account'}</h2>
-          <div className={styles.userInput}>
-          {!isLogin && (
-            <div>
-              <label>Display Name:</label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                required
-              />
-            </div>
-          )}
-          <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          </div>
-          {error && <p>{error}</p>}
-          <div className={styles.buttons}>
-          <button type="submit">{isLogin ? 'Login' : 'Create Account'}</button>
-          <button onClick={toggleForm}>
-            {isLogin ? 'Don\'t have an account?' : 'Already have an account?'}
-          </button>
-          </div>
-        </form>
+      <div className={styles.authDiv}>
+        {isLogin ? renderLoginForm() : renderCreateAccountForm()}
       </div>
     </div>
   );
