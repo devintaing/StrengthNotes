@@ -49,7 +49,8 @@ const Login = () => {
   const renderLoginForm = () => (
     <>
       <form onSubmit={handleLogin} className={styles.authForm}>
-        <h2 className={styles.authTitle}>Login</h2>
+        <h2 className={styles.authTitle}>Sign in</h2>
+        <h3 className={styles.authSubtitle}>Log new workouts and view previous ones.</h3>
         {error && <p>{error}</p>}
         <div className={styles.inputs}>
           <input
@@ -68,7 +69,7 @@ const Login = () => {
           />
         </div>
         <div className={styles.buttons}>
-          <button type="submit">Login</button>
+          <button type="submit">Sign in</button>
           <button onClick={toggleForm}>Don't have an account?</button>
         </div>
       </form>
@@ -79,6 +80,7 @@ const Login = () => {
     <>
       <form onSubmit={handleCreateAccount} className={styles.authForm}>
       <h2 className={styles.authTitle}>Create Account</h2>
+      <h3 className={styles.authSubtitle}>Start logging and visualizing your workouts.</h3>
         {error && <p>{error}</p>}
         <div className={styles.inputs}>
           <input

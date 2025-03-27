@@ -12,13 +12,21 @@ body {
   background-color: hsl(201, 100%, 86%);
   padding: 50px;
   margin-top: 50px;
+  min-width: 400px;
   max-width: 50vw;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
 }
 
 .authTitle {
   font-weight: normal;
+  font-size: 2rem;
+}
+
+.authSubtitle {
+  font-weight: normal;
+  font-size: 1rem;
+  color: hsl(0, 0%, 15%);
 }
 
 .inputs {
@@ -34,4 +42,19 @@ input {
 .buttons {
   margin-top: 20px;
   display: grid;
+}
+
+button {
+  background-color: hsl(216, 100%, 50%);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 25px;
+}
+
+button:hover {
+  background-color: hsl(216, 100%, 40%);
+  transition: 0.5s;
 }
