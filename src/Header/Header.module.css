@@ -1,0 +1,36 @@
+.entireHeader {
+  background-color: #1e1e1f;
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.strengthNotes {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.leftLinks {
+  display: flex;
+  gap: 5px;
+}
+
+.rightLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.otherLinks {
+  font-size: 1.2em;
+}
+
+img {
+  height: 25px;
+}
