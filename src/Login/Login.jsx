@@ -39,7 +39,9 @@ const Login = () => {
       navigate('/home'); // Redirect to home after account creation
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
-        setError('error: an account with that email already exists!');
+        setError('Error: An account with that email already exists. Try signing in.');
+      } else if (err.code === 'auth/admin-restricted-operation') {
+        setError('Error - Account creation is temporarily disabled. Please try again later.');
       } else {
         setError(err.message);
       }
@@ -51,7 +53,7 @@ const Login = () => {
       <form onSubmit={handleLogin} className={styles.authForm}>
         <h2 className={styles.authTitle}>Sign in</h2>
         <h3 className={styles.authSubtitle}>Log new workouts and view previous ones.</h3>
-        {error && <p>{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.inputs}>
           <input
             type="email"
@@ -81,7 +83,7 @@ const Login = () => {
       <form onSubmit={handleCreateAccount} className={styles.authForm}>
       <h2 className={styles.authTitle}>Create Account</h2>
       <h3 className={styles.authSubtitle}>Start logging and visualizing your workouts.</h3>
-        {error && <p>{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.inputs}>
           <input
             type="text"
