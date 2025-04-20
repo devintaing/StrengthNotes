@@ -1,5 +1,5 @@
 body {
-  background-color: hsl(201, 100%, 96%);
+  background-color: hsl(201, 100%, 98%);
 }
 
 .authDiv {
@@ -15,7 +15,7 @@ body {
   min-width: 400px;
   max-width: 50vw;
   border-radius: 5px;
-  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
+  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.03),0 2px 4px hsla(0, 0%, 0%, 0.05),0 12px 24px hsla(0, 0%, 0%, 0.05);
 }
 
 .authTitle {
@@ -64,4 +64,5 @@ button:hover {
   background-color: hsl(8, 100%, 89%);
   padding: 10px;
   margin-top: 10px;
+  border-radius: 5px;
 }

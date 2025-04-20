@@ -1,0 +1,15 @@
+h1 {
+  margin: 20px;
+  padding: 20px;
+}
+
+.startWorkout {
+  background-color: hsl(216, 100%, 50%);
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
+}

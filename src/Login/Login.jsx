@@ -39,7 +39,7 @@ const Login = () => {
       navigate('/home'); // Redirect to home after account creation
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
-        setError('Error: An account with that email already exists. Try signing in.');
+        setError('Error - An account with that email already exists. Try signing in.');
       } else if (err.code === 'auth/admin-restricted-operation') {
         setError('Error - Account creation is temporarily disabled. Please try again later.');
       } else {

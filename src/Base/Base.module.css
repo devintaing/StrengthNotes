@@ -1,12 +1,20 @@
 .mainContent {
   height: 100vh;
-  background-color: hsl(201, 100%, 96%);
+  background-color: hsl(201, 100%, 98%);
 }
 
 .splashText {
   font-size: 3em;
   text-align: center;
-  padding-top: 50px;
+  padding-top: 75px;
   padding-left: 50px;
   padding-right: 50px;
+  padding-bottom: 75px;
+  background-color: hsl(201, 100%, 92%);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50vw);
+  align-items: center;
 }
