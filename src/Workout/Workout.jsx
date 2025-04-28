@@ -4,6 +4,8 @@ import styles from './Workout.module.css';
 
 const Workout = () => {
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [showExerciseMenu, setShowExerciseMenu] = useState(false);
+  const [workoutExercises, setWorkoutExercises] = useState([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,8 +32,21 @@ const Workout = () => {
   };
 
   const handleAddExercise = () => {
-    // TODO: implement choosing from a list of exercises
+    setShowExerciseMenu(true);
   };
+
+  const handleCloseMenu = () => {
+    setShowExerciseMenu(false);
+  };
+
+  const handleSelectExercise = () => {
+    // TODO: implement functionality after choosing an exercise
+  }
+
+
+  // TODO: pull exercises from Firebase instead of hard coding?
+  const exercises = ["Squat (Barbell)", "Deadlift (Barbell)", "Bench Press (Barbell)"];
+
 
   return (
     <div>
@@ -39,6 +54,22 @@ const Workout = () => {
       <p>Time elapsed: {formatTime(timeElapsed)}</p>
       <button onClick={handleAddExercise}>Add exercise</button>
       <button onClick={handleCancel}>Cancel workout</button>
+
+      {showExerciseMenu && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>Select an Exercise</h2>
+            <ul>
+              {exercises.map((exercise, index) => (
+                <li key={index} onClick={() => handleSelectExercise(exercise)}>
+                  {exercise}
+                </li>
+              ))}
+            </ul>
+            <button onClick={handleCloseMenu}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
