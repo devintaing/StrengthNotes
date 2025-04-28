@@ -1,0 +1,68 @@
+.workout {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.set {
+  display: flex;
+  align-items: center;
+}
+
+.set label {
+  margin-left: 5px;
+  margin-right: 15px;
+}
+
+.set input {
+  height: 15px;
+}
+
+.set p {
+  margin-right: 20px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modalContent ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.modalContent li {
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.modalContent button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalContent button:hover {
+  background-color: #0056b3;
+}
