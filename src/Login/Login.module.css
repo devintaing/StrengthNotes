@@ -1,68 +1,112 @@
-body {
-  background-color: hsl(201, 100%, 98%);
-}
-
-.authDiv {
+.container {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fc;
 }
 
-.authForm {
-  background-color: hsl(201, 100%, 86%);
-  padding: 50px;
-  margin-top: 50px;
-  min-width: 400px;
-  max-width: 50vw;
-  border-radius: 5px;
-  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.03),0 2px 4px hsla(0, 0%, 0%, 0.05),0 12px 24px hsla(0, 0%, 0%, 0.05);
+.formCard {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeInUp 0.4s ease;
 }
 
 .authTitle {
-  font-weight: normal;
-  font-size: 2rem;
+  margin-bottom: 20px;
+  font-size: 1.75rem;
+  color: #333;
 }
 
 .authSubtitle {
-  font-weight: normal;
+  margin-bottom: 20px;
   font-size: 1rem;
-  color: hsl(0, 0%, 15%);
+  color: #666;
 }
 
 .inputs {
-  display: grid;
+  display: flex;
+  flex-direction: column;
 }
 
-input {
-  font-size: 1.2rem;
-  padding: 0.5rem;
-  margin-top: 15px;
+.input {
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  border: 1px solid hsl(210, 10%, 85%);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: #5561ff;
+  outline: none;
 }
 
 .buttons {
-  margin-top: 20px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-button {
-  background-color: hsl(216, 100%, 50%);
-  border: none;
+.primaryButton {
+  padding: 12px;
+  background-color: #5561ff;
   color: white;
+  border: none;
+  border-radius: 10px;
   font-size: 1rem;
-  padding: 10px;
-  margin: 5px;
-  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(85, 97, 255, 0.15);
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-button:hover {
-  background-color: hsl(216, 100%, 40%);
-  transition: 0.5s;
+.primaryButton:hover {
+  background-color: #3f49d4;
+  transform: scale(1.02);
 }
 
 .error {
-  color: hsl(8, 18%, 40%);
-  background-color: hsl(8, 100%, 89%);
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 5px;
+  color: #ff4d4f;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.toggleText {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: #5561ff;
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.toggleButton:hover {
+  color: #3f49d4;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

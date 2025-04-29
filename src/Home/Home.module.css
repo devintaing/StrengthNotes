@@ -1,15 +1,26 @@
 h1 {
   margin: 20px;
   padding: 20px;
+  font-size: 2.2rem; 
+  color: hsl(210, 10%, 20%); 
+  text-align: center; 
 }
 
 .startWorkout {
-  background-color: hsl(216, 100%, 50%);
+  background-color: hsl(221, 70%, 55%); 
   text-decoration: none;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.5rem;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px;
+  padding: 18px 32px; 
+  border-radius: 12px; 
+  margin: 20px auto; 
+  display: block; 
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.startWorkout:hover {
+  background-color: hsl(221, 70%, 45%);
+  transform: translateY(-3px); 
 }

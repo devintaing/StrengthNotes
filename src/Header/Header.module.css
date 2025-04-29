@@ -1,15 +1,20 @@
 .entireHeader {
-  background-color: #1e1e1f;
+  background-color: #141631; 
   color: white;
   padding: 15px;
   display: flex;
-  align-items: last baseline;
+  align-items: baseline; 
   justify-content: space-between;
 }
 
 .link {
   text-decoration: none;
   color: white;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #3f49d4;
 }
 
 .strengthNotes {
@@ -33,4 +38,9 @@
 
 img {
   height: 25px;
+  transition: transform 0.2s ease;
+}
+
+img:hover {
+  transform: scale(1.1);
 }

@@ -1,12 +1,16 @@
 .workout {
-  border: 1px solid;
-  border-radius: 10px;
+  border: 1px solid hsl(210, 10%, 90%);
+  border-radius: 12px;
   padding: 20px;
+  background: #f8f9fc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .set {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .set label {
@@ -15,7 +19,9 @@
 }
 
 .set input {
-  height: 15px;
+  height: 30px;
+  padding: 5px;
+  font-size: 1rem;
 }
 
 .set p {
@@ -28,41 +34,82 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.25); 
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 1000; 
 }
 
 .modalContent {
+  animation: fadeInUp 0.3s ease;
+  transform-origin: center;
   background-color: white;
   padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.modalContent h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  color: #333;
 }
 
 .modalContent ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .modalContent li {
-  margin: 10px 0;
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  background-color: #fafafa;
+  border-radius: 10px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.modalContent li:hover {
+  background-color: #eef1ff;
+  transform: scale(1.02);
 }
 
 .modalContent button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #5561ff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 10px rgba(85, 97, 255, 0.15);
 }
 
 .modalContent button:hover {
-  background-color: #0056b3;
+  background-color: #3f49d4;
+}
+
+.selectedExercise {
+  font-weight: bold;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

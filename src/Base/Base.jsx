@@ -10,8 +10,9 @@ const Base = () => {
       <Header/>
       <div className={styles.mainContent}>
         <p className={styles.splashText}>Easily track and visualize your workouts.</p>
-        <div className={styles.features}>
-          <Feature featuretitle="Cloud Storage"
+        <button className={styles.heroButton}>Get Started</button>
+        <div className={`${styles.features} ${styles.fadeIn}`}>
+        <Feature featuretitle="Cloud Storage"
             feature1="View your workouts from any device"
             feature2="Never worry about losing your data"/>
           <Feature featuretitle="Visualizations (WIP)"
@@ -28,5 +29,6 @@ const Base = () => {
     </div>
   );
 };
+
 
 export default Base;
