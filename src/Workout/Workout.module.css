@@ -5,6 +5,8 @@
   background: #f8f9fc;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1000px;
+  margin: 0 auto 60px;
 }
 
 .set {
