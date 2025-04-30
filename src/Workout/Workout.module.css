@@ -1,18 +1,14 @@
 .workout {
-  border: 1px solid hsl(210, 10%, 90%);
-  border-radius: 12px;
+  border: 1px solid;
+  border-radius: 10px;
   padding: 20px;
-  background: #f8f9fc;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 1000px;
-  margin: 0 auto 60px;
 }
 
 .set {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  gap: 10px;
 }
 
 .set label {
@@ -21,9 +17,11 @@
 }
 
 .set input {
-  height: 30px;
+  height: 25px;
+  width: 60px;
   padding: 5px;
-  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .set p {
@@ -36,82 +34,142 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.25); 
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000; 
+  align-items: center;
+  z-index: 1000;
 }
 
 .modalContent {
-  animation: fadeInUp 0.3s ease;
-  transform-origin: center;
   background-color: white;
   padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
-  margin: 0 auto;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  text-align: left;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .modalContent h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.25rem;
-  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .modalContent ul {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
-  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 .modalContent li {
-  margin: 0.75rem 0;
-  padding: 0.75rem 1rem;
-  background-color: #fafafa;
-  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
+  text-align: center;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .modalContent li:hover {
-  background-color: #eef1ff;
+  background-color: #d0ebff;
   transform: scale(1.02);
 }
 
 .modalContent button {
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #5561ff;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 4px 10px rgba(85, 97, 255, 0.15);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .modalContent button:hover {
-  background-color: #3f49d4;
+  background-color: #0056b3;
 }
 
-.selectedExercise {
-  font-weight: bold;
-  background-color: #f0f0f0;
+.exercise-section {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 4px 8px;
+  background-color: #f9f9f9;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.sets-container {
+  margin-left: 10px;
+}
+
+.add-set-button, .delete-set-button {
+  margin-top: 10px;
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-set-button:hover, .delete-set-button:hover {
+  background-color: #218838;
+}
+
+.delete-exercise-button {
+  background-color: #dc3545;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.delete-exercise-button:hover {
+  background-color: #c82333;
+}
+
+.exercise-category {
+  margin-top: 30px;
+  font-size: 2rem; 
+  font-weight: bold;
+  color: #333;
+  padding-left: 10px;
+  text-transform: uppercase;
+  border-left: 5px solid #007bff;
+  padding-bottom: 15px; 
+  margin-bottom: 20px; 
+}
+
+.exercise-category + .modalContent {
+  margin-top: 50px; 
+}
+
+.body-part-header {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  color: #222;
+  border-left: 4px solid #007bff;
 }

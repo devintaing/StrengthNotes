@@ -1,26 +1,52 @@
 h1 {
   margin: 20px;
   padding: 20px;
-  font-size: 2.2rem; 
-  color: hsl(210, 10%, 20%); 
-  text-align: center; 
 }
 
 .startWorkout {
-  background-color: hsl(221, 70%, 55%); 
+  background-color: hsl(216, 100%, 50%);
   text-decoration: none;
   color: white;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 1.5rem;
-  padding: 18px 32px; 
-  border-radius: 12px; 
-  margin: 40px auto; 
-  display: block; 
-  text-align: center;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
 }
 
-.startWorkout:hover {
-  background-color: hsl(221, 70%, 45%);
-  transform: translateY(-3px); 
+.welcomeMessage {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.card {
+  background-color: #f0f4f8;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 30px 40px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: translateY(-5px);
 }

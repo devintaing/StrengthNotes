@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import styles from './Workout.module.css';
-import { FaDumbbell } from 'react-icons/fa';
 
 const Workout = () => {
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [showExerciseMenu, setShowExerciseMenu] = useState(false);
-  const [workoutExercises, setWorkoutExercises] = useState([]);
-  const [selectedExercise, setSelectedExercise] = useState('');
+  const [selectedExercises, setSelectedExercises] = useState([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeElapsed((prevTime) => prevTime + 1);
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
 
@@ -21,7 +18,7 @@ const Workout = () => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-  
+
     if (hrs > 0) {
       return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     } else {
@@ -30,11 +27,9 @@ const Workout = () => {
   };
 
   const handleCancel = () => {
-    // TODO: implement ability to cancel a workout
-    setWorkoutExercises([]);
-    setTimeElapsed(0);
+    setSelectedExercises([]);
     setShowExerciseMenu(false);
-    setSelectedExercise('');
+    setTimeElapsed(0);
   };
 
   const handleAddExercise = () => {
@@ -43,22 +38,77 @@ const Workout = () => {
 
   const handleCloseMenu = () => {
     setShowExerciseMenu(false);
-    setSelectedExercise('');
   };
 
   const handleSelectExercise = (exercise) => {
-    setSelectedExercise(exercise);
+    setSelectedExercises(prev => [...prev, { name: exercise, sets: [] }]);
+    setShowExerciseMenu(false);
   };
 
-  const handleConfirmExercise = () => {
-    if (selectedExercise) {
-      setWorkoutExercises((prevExercises) => [...prevExercises, selectedExercise]);
-      setSelectedExercise('');
-      setShowExerciseMenu(false);
-    }
+  const handleAddSet = (exerciseIndex) => {
+    const updated = [...selectedExercises];
+    updated[exerciseIndex].sets.push({ weight: '', reps: '' });
+    setSelectedExercises(updated);
   };
 
-  const exercises = ["Squat (Barbell)", "Deadlift (Barbell)", "Bench Press (Barbell)"];
+  const handleUpdateSet = (exerciseIndex, setIndex, field, value) => {
+    const updated = [...selectedExercises];
+    updated[exerciseIndex].sets[setIndex][field] = value;
+    setSelectedExercises(updated);
+  };
+
+  const handleDeleteExercise = (index) => {
+    const updated = [...selectedExercises];
+    updated.splice(index, 1);
+    setSelectedExercises(updated);
+  };
+
+  const handleDeleteSet = (exerciseIndex, setIndex) => {
+    const updated = [...selectedExercises];
+    updated[exerciseIndex].sets.splice(setIndex, 1);
+    setSelectedExercises(updated);
+  };
+
+  const exercisesByBodyPart = {
+    Legs: [
+      "Squat (Barbell)",
+      "Front Squat (Barbell)",
+      "Leg Press (Machine)",
+      "Leg Curl (Machine)",
+      "Leg Extension (Machine)",
+      "Lunge (Dumbbell)",
+      "Romanian Deadlift (Barbell)"
+    ],
+    Back: [
+      "Deadlift (Barbell)",
+      "Bent Over Row (Barbell)",
+      "Seated Row (Cable)",
+      "Lat Pulldown (Cable)",
+      "Single-Arm Row (Dumbbell)"
+    ],
+    Chest: [
+      "Bench Press (Barbell)",
+      "Incline Bench Press (Barbell)",
+      "Decline Bench Press (Barbell)",
+      "Chest Fly (Dumbbell)",
+      "Cable Crossover (Cable)",
+    ],
+    Shoulders: [
+      "Overhead Press (Barbell)",
+      "Lateral Raise (Dumbbell)",
+      "Front Raise (Dumbbell)",
+      "Arnold Press (Dumbbell)",
+      "Face Pull (Cable)"
+    ],
+    Arms: [
+      "Barbell Curl",
+      "Dumbbell Curl",
+      "Hammer Curl",
+      "Triceps Pushdown (Cable)",
+      "Overhead Triceps Extension (Dumbbell)",
+      "Preacher Curl (Machine)"
+    ],
+  };
 
   return (
     <div>
@@ -67,38 +117,47 @@ const Workout = () => {
       <button onClick={handleAddExercise}>Add exercise</button>
       <button onClick={handleCancel}>Cancel workout</button>
 
-      {workoutExercises.length > 0 && (
-        <ul>
-          {workoutExercises.map((exercise, index) => (
-            <li key={index}>
-              <FaDumbbell style={{ marginRight: '6px', verticalAlign: 'middle' }} />
-              {exercise}
-            </li>
+      {selectedExercises.map((exercise, i) => (
+        <div key={i} className={styles.workout}>
+          <h3>{exercise.name} <button onClick={() => handleDeleteExercise(i)}>Delete Exercise</button></h3>
+          {exercise.sets.map((set, j) => (
+            <div key={j} className={styles.set}>
+              <label>Set {j + 1}</label>
+              <input
+                type="number"
+                placeholder="Weight (lbs)"
+                value={set.weight}
+                onChange={(e) => handleUpdateSet(i, j, 'weight', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Reps"
+                value={set.reps}
+                onChange={(e) => handleUpdateSet(i, j, 'reps', e.target.value)}
+              />
+              <button onClick={() => handleDeleteSet(i, j)}>Delete Set</button>
+            </div>
           ))}
-        </ul>
-      )}
+          <button onClick={() => handleAddSet(i)}>Add Set</button>
+        </div>
+      ))}
 
       {showExerciseMenu && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h2>Select an Exercise</h2>
-            <ul className={styles.exerciseList}>
-              {exercises.map((exercise, index) => (
-                <li
-                  key={index}
-                  className={selectedExercise === exercise ? styles.selectedExercise : ''}
-                  onClick={() => handleSelectExercise(exercise)}
-                  style={{ cursor: 'pointer', margin: '8px 0' }}
-                >
-                  <FaDumbbell style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                  {exercise}
-                </li>
-              ))}
-            </ul>
-
-            {selectedExercise && (
-              <button onClick={handleConfirmExercise}>Confirm "{selectedExercise}"</button>
-            )}
+            {Object.entries(exercisesByBodyPart).map(([bodyPart, exercises]) => (
+              <div key={bodyPart}>
+                <h3>{bodyPart}</h3>
+                <ul>
+                  {exercises.map((exercise, index) => (
+                    <li key={index} onClick={() => handleSelectExercise(exercise)}>
+                      {exercise}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
             <button onClick={handleCloseMenu}>Close</button>
           </div>
         </div>
