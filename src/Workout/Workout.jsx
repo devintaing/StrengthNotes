@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import styles from './Workout.module.css';
 
 const Workout = () => {
+  const navigate = useNavigate();
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [showExerciseMenu, setShowExerciseMenu] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -27,10 +31,17 @@ const Workout = () => {
   };
 
   const handleCancel = () => {
-    setSelectedExercises([]);
-    setShowExerciseMenu(false);
-    setTimeElapsed(0);
+    if(selectedExercises.length > 0) {
+      setShowCancelConfirmation(true);
+    }
+    else {
+      redirectHome();
+    }
   };
+
+  const redirectHome = () => {
+    navigate('/home');
+  }
 
   const handleAddExercise = () => {
     setShowExerciseMenu(true);
@@ -41,7 +52,13 @@ const Workout = () => {
   };
 
   const handleSelectExercise = (exercise) => {
-    setSelectedExercises(prev => [...prev, { name: exercise, sets: [] }]);
+    setSelectedExercises(prev => [
+      ...prev, 
+      { 
+        name: exercise, 
+        sets: [{ weight: '', reps: '' }]
+      }
+    ]);
     setShowExerciseMenu(false);
   };
 
@@ -66,7 +83,21 @@ const Workout = () => {
   const handleDeleteSet = (exerciseIndex, setIndex) => {
     const updated = [...selectedExercises];
     updated[exerciseIndex].sets.splice(setIndex, 1);
+
+    if(updated[exerciseIndex].sets.length === 0) {
+      updated.splice(exerciseIndex, 1);
+    }
+
     setSelectedExercises(updated);
+  };
+
+  const handleCompleteWorkout = () => {
+    if(selectedExercises.length > 0) {
+      setShowCompleteConfirmation(true);
+    }
+    else {
+      setShowCancelConfirmation(true);
+    }
   };
 
   const exercisesByBodyPart = {
@@ -114,8 +145,7 @@ const Workout = () => {
     <div>
       <Header />
       <p>Time elapsed: {formatTime(timeElapsed)}</p>
-      <button onClick={handleAddExercise}>Add exercise</button>
-      <button onClick={handleCancel}>Cancel workout</button>
+      <button onClick={handleAddExercise}>Add Exercise</button>
 
       {selectedExercises.map((exercise, i) => (
         <div key={i} className={styles.workout}>
@@ -162,6 +192,29 @@ const Workout = () => {
           </div>
         </div>
       )}
+
+      {showCancelConfirmation && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>Are you sure you want to cancel this workout?</h2>
+            <button onClick={redirectHome}>Cancel Workout</button>
+            <button onClick={() => setShowCancelConfirmation(false)}>No, keep going.</button>
+          </div>
+        </div>
+      )}
+
+      {showCompleteConfirmation && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>Are you sure you want to complete this workout?</h2>
+            <button onClick={redirectHome}>Complete Workout</button>
+            <button onClick={() => setShowCompleteConfirmation(false)}>No, keep going.</button>
+          </div>
+        </div>
+      )}
+
+      <button onClick={handleCompleteWorkout}>Complete Workout</button>
+      <button onClick={handleCancel}>Cancel Workout</button>
     </div>
   );
 };
