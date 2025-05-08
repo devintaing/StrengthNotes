@@ -18,7 +18,6 @@ h1 {
   font-size: 2rem;
   text-align: center;
   margin-top: 30px;
-  margin-bottom: 40px;
 }
 
 .cardContainer {
@@ -49,4 +48,10 @@ h1 {
   color: white;
   border-color: #007bff;
   transform: translateY(-5px);
+}
+
+.workoutCount {
+  text-align: center;
+  color: hsl(0, 0%, 50%);
+  margin-bottom: 30px;
 }

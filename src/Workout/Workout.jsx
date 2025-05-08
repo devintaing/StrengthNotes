@@ -1,19 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getFirestore, collection, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import Header from '../Header/Header';
 import styles from './Workout.module.css';
 
 const Workout = () => {
   const navigate = useNavigate();
-  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [timeStarted, setTimeStarted] = useState(null);
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [showExerciseMenu, setShowExerciseMenu] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false);
+  const [exercises, setExercises] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+
+  useEffect(() => {
+    setTimeStarted(new Date().toISOString());
+
+    const fetchExercises = async () => {
+      const db = getFirestore();
+      const docRef = doc(db, 'exercises', 'built-in');
+      const snapshot = await getDoc(docRef);
+  
+      const exercisesData = snapshot.data();
+      const exercisesList = Object.keys(exercisesData)
+        .sort() // ensure exercises are in alphabetical order
+        .map((key) => ({
+          name: key,
+          category: exercisesData[key].category,
+          equipment: exercisesData[key].equipment,
+        }));
+      setExercises(exercisesList);
+    };
+  
+    fetchExercises();
+  }, []);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredExercises = exercises.filter((exercise) =>
+    exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeElapsed((prevTime) => prevTime + 1);
+      setSecondsElapsed((prevTime) => prevTime + 1);
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -55,7 +91,7 @@ const Workout = () => {
     setSelectedExercises(prev => [
       ...prev, 
       { 
-        name: exercise, 
+        name: exercise.name, 
         sets: [{ weight: '', reps: '' }]
       }
     ]);
@@ -100,121 +136,112 @@ const Workout = () => {
     }
   };
 
-  const exercisesByBodyPart = {
-    Legs: [
-      "Squat (Barbell)",
-      "Front Squat (Barbell)",
-      "Leg Press (Machine)",
-      "Leg Curl (Machine)",
-      "Leg Extension (Machine)",
-      "Lunge (Dumbbell)",
-      "Romanian Deadlift (Barbell)"
-    ],
-    Back: [
-      "Deadlift (Barbell)",
-      "Bent Over Row (Barbell)",
-      "Seated Row (Cable)",
-      "Lat Pulldown (Cable)",
-      "Single-Arm Row (Dumbbell)"
-    ],
-    Chest: [
-      "Bench Press (Barbell)",
-      "Incline Bench Press (Barbell)",
-      "Decline Bench Press (Barbell)",
-      "Chest Fly (Dumbbell)",
-      "Cable Crossover (Cable)",
-    ],
-    Shoulders: [
-      "Overhead Press (Barbell)",
-      "Lateral Raise (Dumbbell)",
-      "Front Raise (Dumbbell)",
-      "Arnold Press (Dumbbell)",
-      "Face Pull (Cable)"
-    ],
-    Arms: [
-      "Barbell Curl",
-      "Dumbbell Curl",
-      "Hammer Curl",
-      "Triceps Pushdown (Cable)",
-      "Overhead Triceps Extension (Dumbbell)",
-      "Preacher Curl (Machine)"
-    ],
-  };
+  const saveWorkoutData = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      
+      const db = getFirestore();
+      const workoutData = {
+        exercises: selectedExercises,
+        timeStarted,
+        secondsElapsed,
+        timeCompleted: new Date().toISOString(),
+      };
+
+      await addDoc(collection(db, 'users', user.uid, 'workouts'), workoutData);
+      redirectHome();
+    }
+    catch (error) {
+      console.error("An error occurred while trying to save the workout: ", error);
+    }
+  }
 
   return (
     <div>
       <Header />
-      <p>Time elapsed: {formatTime(timeElapsed)}</p>
-      <button onClick={handleAddExercise}>Add Exercise</button>
-
-      {selectedExercises.map((exercise, i) => (
-        <div key={i} className={styles.workout}>
-          <h3>{exercise.name} <button onClick={() => handleDeleteExercise(i)}>Delete Exercise</button></h3>
-          {exercise.sets.map((set, j) => (
-            <div key={j} className={styles.set}>
-              <label>Set {j + 1}</label>
-              <input
-                type="number"
-                placeholder="Weight (lbs)"
-                value={set.weight}
-                onChange={(e) => handleUpdateSet(i, j, 'weight', e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="Reps"
-                value={set.reps}
-                onChange={(e) => handleUpdateSet(i, j, 'reps', e.target.value)}
-              />
-              <button onClick={() => handleDeleteSet(i, j)}>Delete Set</button>
-            </div>
-          ))}
-          <button onClick={() => handleAddSet(i)}>Add Set</button>
-        </div>
-      ))}
-
-      {showExerciseMenu && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Select an Exercise</h2>
-            {Object.entries(exercisesByBodyPart).map(([bodyPart, exercises]) => (
-              <div key={bodyPart}>
-                <h3>{bodyPart}</h3>
-                <ul>
-                  {exercises.map((exercise, index) => (
-                    <li key={index} onClick={() => handleSelectExercise(exercise)}>
-                      {exercise}
-                    </li>
-                  ))}
-                </ul>
+      <div className={styles.mainContent}>
+        <p>Time elapsed: {formatTime(secondsElapsed)}</p>
+        {selectedExercises.map((exercise, i) => (
+          <div key={i} className={styles.workout}>
+            <h3>{exercise.name}<button onClick={() => handleDeleteExercise(i)}>Delete Exercise</button></h3>
+            {exercise.sets.map((set, j) => (
+              <div key={j} className={styles.set}>
+                <label>Set {j + 1}</label>
+                <input
+                  type="number"
+                  placeholder="Weight (lbs)"
+                  value={set.weight}
+                  onChange={(e) => handleUpdateSet(i, j, 'weight', e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="Reps"
+                  value={set.reps}
+                  onChange={(e) => handleUpdateSet(i, j, 'reps', e.target.value)}
+                />
+                <button onClick={() => handleDeleteSet(i, j)}>Delete Set</button>
               </div>
             ))}
-            <button onClick={handleCloseMenu}>Close</button>
+            <button onClick={() => handleAddSet(i)}>Add Set</button>
           </div>
-        </div>
-      )}
+        ))}
 
-      {showCancelConfirmation && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Are you sure you want to cancel this workout?</h2>
-            <button onClick={redirectHome}>Cancel Workout</button>
-            <button onClick={() => setShowCancelConfirmation(false)}>No, keep going.</button>
+        {showExerciseMenu && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <div className={styles.modalHeader}>
+                <h2>Select an Exercise</h2>
+                <button onClick={handleCloseMenu} className={styles.closeButton}>Cancel</button>
+              </div>
+              <input
+                type="text"
+                placeholder="Search for an exercise..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className={styles.searchBar}
+              />
+              <ul>
+                {filteredExercises.map((exercise) => (
+                  <li key={exercise.id} onClick={() => handleSelectExercise(exercise)}>
+                    {exercise.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {showCompleteConfirmation && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Are you sure you want to complete this workout?</h2>
-            <button onClick={redirectHome}>Complete Workout</button>
-            <button onClick={() => setShowCompleteConfirmation(false)}>No, keep going.</button>
+        {showCancelConfirmation && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <h2>Are you sure you want to cancel this workout?</h2>
+              <div className={styles.modalButtons}>
+                <button onClick={redirectHome}>Cancel Workout</button>
+                <button onClick={() => setShowCancelConfirmation(false)}>No, keep going.</button>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <button onClick={handleCompleteWorkout}>Complete Workout</button>
-      <button onClick={handleCancel}>Cancel Workout</button>
+        {showCompleteConfirmation && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <h2>Are you sure you want to complete this workout?</h2>
+              <div className={styles.modalButtons}>
+                <button onClick={saveWorkoutData}>Complete Workout</button>
+                <button onClick={() => setShowCompleteConfirmation(false)}>No, keep going.</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className={styles.optionButtons}>
+          <button onClick={handleAddExercise}>Add Exercise</button>
+          <button onClick={handleCompleteWorkout}>Complete Workout</button>
+          <button onClick={handleCancel}>Cancel Workout</button>
+        </div>
+      </div>
     </div>
   );
 };

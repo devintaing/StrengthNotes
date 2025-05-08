@@ -1,3 +1,9 @@
+.mainContent {
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 50px;
+}
+
 .workout {
   border: 1px solid;
   border-radius: 10px;
@@ -80,21 +86,8 @@
   transform: scale(1.02);
 }
 
-.modalContent button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.modalContent button:hover {
-  background-color: #0056b3;
+.modalButtons {
+  display: grid;
 }
 
 .exercise-section {
@@ -164,12 +157,30 @@
   margin-top: 50px; 
 }
 
-.body-part-header {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-top: 40px;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  color: #222;
-  border-left: 4px solid #007bff;
+.modalHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.searchBar {
+  margin-bottom: 30px;
+  width: 95%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.closeButton {
+  background-color: transparent;
+  color: black;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background-color: hsl(0, 0%, 90%);
+}
+
+.optionButtons {
+  display: grid;
 }
