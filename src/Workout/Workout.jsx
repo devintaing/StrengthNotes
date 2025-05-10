@@ -48,6 +48,29 @@ const Workout = () => {
     fetchExercises();
   }, []);
 
+  useEffect(() => {
+    // save workout state to localStorage whenever it changes
+    if (timeStarted) {
+      const workoutData = {
+        selectedExercises,
+        timeStarted,
+        secondsElapsed,
+      };
+      localStorage.setItem('workoutState', JSON.stringify(workoutData));
+    }
+  }, [selectedExercises, secondsElapsed]); // save whenenever timer changes or user selects an exercise
+
+  useEffect(() => {
+    // load workout state from localStorage
+    const savedWorkout = localStorage.getItem('workoutState');
+    if (savedWorkout) {
+      const { selectedExercises, timeStarted, secondsElapsed } = JSON.parse(savedWorkout);
+      setSelectedExercises(selectedExercises || []);
+      setTimeStarted(timeStarted || new Date().toISOString());
+      setSecondsElapsed(secondsElapsed || 0);
+    }
+  }, []);
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -82,9 +105,11 @@ const Workout = () => {
     else {
       redirectHome();
     }
+    localStorage.removeItem('workoutState');
   };
 
   const redirectHome = () => {
+    localStorage.removeItem('workoutState');
     navigate('/home');
   }
 
