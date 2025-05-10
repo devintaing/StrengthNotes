@@ -1,37 +1,41 @@
 .mainContent {
   max-width: 1200px;
   margin: auto;
-  margin-top: 50px;
 }
 
 .workout {
-  border: 1px solid;
-  border-radius: 10px;
   padding: 20px;
+  background-color: hsl(210, 15%, 98%);
+  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.03), 0 4px 8px hsla(0, 0%, 0%, 0.05), 0 12px 24px hsla(0, 0%, 0%, 0.05);
+  border-radius: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.workout:hover {
+  background-color: hsl(210, 15%, 97%);
+  transform: translateY(-5px); 
 }
 
 .set {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   margin-bottom: 10px;
+  margin-top: 10px;
   gap: 10px;
 }
 
-.set label {
-  margin-left: 5px;
-  margin-right: 15px;
-}
-
 .set input {
-  height: 25px;
-  width: 60px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.set p {
-  margin-right: 20px;
+.setNumber {
+  padding: 20px;
+}
+
+.deleteSetButton {
+  background-color: transparent;
+  color: black;
 }
 
 .modal {
@@ -109,54 +113,6 @@
   padding-bottom: 10px;
 }
 
-.sets-container {
-  margin-left: 10px;
-}
-
-.add-set-button, .delete-set-button {
-  margin-top: 10px;
-  background-color: #28a745;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-set-button:hover, .delete-set-button:hover {
-  background-color: #218838;
-}
-
-.delete-exercise-button {
-  background-color: #dc3545;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.delete-exercise-button:hover {
-  background-color: #c82333;
-}
-
-.exercise-category {
-  margin-top: 30px;
-  font-size: 2rem; 
-  font-weight: bold;
-  color: #333;
-  padding-left: 10px;
-  text-transform: uppercase;
-  border-left: 5px solid #007bff;
-  padding-bottom: 15px; 
-  margin-bottom: 20px; 
-}
-
-.exercise-category + .modalContent {
-  margin-top: 50px; 
-}
-
 .modalHeader {
   display: flex;
   align-items: baseline;
@@ -177,10 +133,41 @@
   cursor: pointer;
 }
 
-.closeButton:hover {
+.closeButton:hover, .deleteSetButton:hover {
   background-color: hsl(0, 0%, 90%);
+  transition: background-color 0.3s ease;
 }
 
 .optionButtons {
   display: grid;
+
+}
+
+.optionButtons button {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.optionButtons button:hover {
+  transform: translateY(-3px);
+}
+
+.timer {
+  color: hsla(0, 0%, 0%, 0.7);
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+.workoutTitle {
+  font-size: 3rem;
+}
+
+.date {
+  color: hsla(0, 0%, 0%, 0.7);
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.workoutInfo {
+  margin-left: 20px;
+  margin-top: 50px;
 }

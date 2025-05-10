@@ -43,7 +43,7 @@ const Home = () => {
         <div className={styles.card} onClick={() => handleCardClick('/workout')}>
           Start Workout
         </div>
-        <div className={styles.card} onClick={() => handleCardClick('/past-workouts')}>
+        <div className={styles.card} onClick={() => handleCardClick('/history')}>
           View Past Workouts
         </div>
         <div className={styles.card} onClick={() => handleCardClick('/visualizations')}>

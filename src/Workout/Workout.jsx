@@ -15,10 +15,19 @@ const Workout = () => {
   const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false);
   const [exercises, setExercises] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
 
 
   useEffect(() => {
     setTimeStarted(new Date().toISOString());
+
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    setCurrentDate(formattedDate);
 
     const fetchExercises = async () => {
       const db = getFirestore();
@@ -161,13 +170,17 @@ const Workout = () => {
     <div>
       <Header />
       <div className={styles.mainContent}>
-        <p>Time elapsed: {formatTime(secondsElapsed)}</p>
+        <div className={styles.workoutInfo}>
+          <p className={styles.workoutTitle}>Today's Workout</p>
+          <p className={styles.date}>Date: {currentDate}</p>
+          <p className={styles.timer}>Time Elapsed: {formatTime(secondsElapsed)}</p>
+        </div>
         {selectedExercises.map((exercise, i) => (
           <div key={i} className={styles.workout}>
-            <h3>{exercise.name}<button onClick={() => handleDeleteExercise(i)}>Delete Exercise</button></h3>
+            <h3>{exercise.name}</h3>
             {exercise.sets.map((set, j) => (
               <div key={j} className={styles.set}>
-                <label>Set {j + 1}</label>
+                <label className={styles.setNumber}>Set {j + 1}</label>
                 <input
                   type="number"
                   placeholder="Weight (lbs)"
@@ -180,10 +193,11 @@ const Workout = () => {
                   value={set.reps}
                   onChange={(e) => handleUpdateSet(i, j, 'reps', e.target.value)}
                 />
-                <button onClick={() => handleDeleteSet(i, j)}>Delete Set</button>
+                <button onClick={() => handleDeleteSet(i, j)} className={styles.deleteSetButton}>x</button>
               </div>
             ))}
             <button onClick={() => handleAddSet(i)}>Add Set</button>
+            <button onClick={() => handleDeleteExercise(i)}>Delete Exercise</button>
           </div>
         ))}
 

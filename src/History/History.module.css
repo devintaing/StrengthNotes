@@ -1,0 +1,19 @@
+.mainContent {
+  max-width: 1200px;
+}
+
+.workoutCard {
+  border: 1px solid black;
+  border-radius: 15px;
+  max-width: 600px;
+}
+
+.workoutCard h1 {
+  font-size: 1.2rem;
+  padding: 10px;
+}
+
+.workoutCard h2 {
+  font-size: 1.0rem;
+  padding: 10px;
+}
