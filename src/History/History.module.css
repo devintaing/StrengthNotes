@@ -1,19 +1,28 @@
 .mainContent {
   max-width: 1200px;
+  margin: auto;
 }
 
-.workoutCard {
-  border: 1px solid black;
-  border-radius: 15px;
-  max-width: 600px;
+.workout {
+  padding: 20px;
+  background-color: hsl(210, 15%, 98%);
+  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.03), 0 4px 8px hsla(0, 0%, 0%, 0.05), 0 12px 24px hsla(0, 0%, 0%, 0.05);
+  border-radius: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.workoutCard h1 {
-  font-size: 1.2rem;
-  padding: 10px;
+.workout:hover {
+  background-color: hsl(210, 15%, 97%);
+  transform: translateY(-5px); 
 }
 
-.workoutCard h2 {
-  font-size: 1.0rem;
-  padding: 10px;
+.workoutTitle {
+  font-size: 3rem;
+}
+
+.workoutInfo {
+  margin-left: 20px;
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
