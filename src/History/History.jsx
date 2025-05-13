@@ -71,7 +71,7 @@ const History = () => {
       <Header />
       <div className={styles.mainContent}>
         <div className={styles.workoutInfo}>
-          <p className={styles.workoutTitle}>Workout History</p>
+          <p className={styles.pageTitle}>Workout History</p>
           <p className={styles.workoutCount}>
             You have logged {workoutCount} workout{workoutCount === 1 ? '' : 's'}.
           </p>
@@ -81,6 +81,22 @@ const History = () => {
           <div className={styles.workout}>
             <h3 className={styles.workoutTitle}>{workout.timeStarted}</h3>
             <p className={styles.info}>Duration: {workout.duration} minutes</p>
+            <div className={styles.exerciseSection}>
+              <ul>
+                {workout.exercises.map((exercise, index) => (
+                  <li className={styles.exerciseItem}>
+                    <h4 className={styles.exerciseName}>{index + 1}. {exercise.name}</h4>
+                    <ul>
+                      {exercise.sets.map((set, setIndex) => (
+                        <li className={styles.setItem}>
+                          Set {setIndex + 1}: {set.weight || '0'} lbs x {set.reps || '0'} reps
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         ))}
       </div>
