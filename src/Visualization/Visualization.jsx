@@ -39,8 +39,14 @@ const Visualization = () => {
       const db = getFirestore();
       const workoutsRef = collection(db, 'users', user.uid, 'workouts');
       const snapshot = await getDocs(workoutsRef);
-      const workoutsList = snapshot.docs.map((doc) => doc.data());
+
+      const workoutsList = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
       setWorkouts(workoutsList);
+      console.log('Fetched workouts:', workoutsList);
     };
 
     fetchWorkouts();
@@ -76,23 +82,21 @@ const Visualization = () => {
   const prData = {};
 
   filteredWorkouts.forEach((workout) => {
-    const workoutDate = new Date(workout.timeCompleted);
-    workoutDate.setHours(0, 0, 0, 0);
-    const dateKey = workoutDate.toLocaleDateString();
-
     if (workout.exercises) {
       workout.exercises.forEach((exercise) => {
-        const { name, weight } = exercise;
+        const { name, sets } = exercise;
+
         if (!prData[name]) prData[name] = {};
 
-        if (timespan === '1') {
-          if (!prData[name][dateKey]) prData[name][dateKey] = [];
-          prData[name][dateKey].push(weight);
-        } else {
-          if (!prData[name][dateKey] || weight > prData[name][dateKey]) {
-            prData[name][dateKey] = weight;
+        sets.forEach((set) => {
+          const { weight } = set;
+          const workoutDate = new Date(workout.timeCompleted).toLocaleDateString();
+
+          // Track the maximum weight for each date
+          if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
+            prData[name][workoutDate] = weight;
           }
-        }
+        });
       });
     }
   });
@@ -114,16 +118,8 @@ const Visualization = () => {
     );
 
     exerciseDates.forEach((date) => {
-      const entry = prData[selectedExercise][date];
-      if (Array.isArray(entry)) {
-        entry.forEach((val) => {
-          chartLabels.push(date);
-          chartValues.push(val);
-        });
-      } else {
-        chartLabels.push(date);
-        chartValues.push(entry);
-      }
+      chartLabels.push(date);
+      chartValues.push(prData[selectedExercise][date]);
     });
   }
 
@@ -131,10 +127,10 @@ const Visualization = () => {
     labels: chartLabels,
     datasets: [
       {
-        label: `${selectedExercise} PR (lbs)`,
+        label: `${selectedExercise} Top Weight (lbs)`,
         data: chartValues,
-        borderColor: 'rgba(255,99,132,1)',
-        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(75,192,192,0.2)',
         tension: 0.3,
       },
     ],
