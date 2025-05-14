@@ -1,0 +1,42 @@
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  background-color: hsl(210, 15%, 98%);
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.03),
+              0 4px 8px hsla(0, 0%, 0%, 0.05),
+              0 12px 24px hsla(0, 0%, 0%, 0.05);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.container:hover {
+  background-color: hsl(210, 15%, 97%);
+  transform: translateY(-3px);
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+select {
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+}
+
+select:focus {
+  outline: none;
+  border-color: #7ab8f5;
+  background-color: #ffffff;
+}
+
+label {
+  font-weight: 600;
+  margin-right: 5px;
+}
