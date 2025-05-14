@@ -3,38 +3,63 @@
   background-color: hsl(210, 15%, 98%);  
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 60px 40px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.heroSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .heroSection {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .features {
+    margin-top: 50px;
+  }
+
+  .splashContainer {
+    margin-top: 50px !important;
+  }
+}
+
+.splashContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 250px
 }
 
 .splashText {
   font-size: 3em;
   text-align: center;
-  padding: 50px 20px;
-  background-color: hsl(0, 0%, 98%);  
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  margin-bottom: 60px;
-  max-width: 900px;
-  width: 100%;
   animation: fadeIn 1s ease;
+  margin-bottom: 50px;
 }
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 40px;
   width: 100%;
-  max-width: 1200px;
-  padding: 20px;
+  max-width: 700px;
 }
 
 .heroButton {
   margin-top: 20px;
   padding: 12px 24px;
-  font-size: 1.2rem;
+  font-size: 2rem;
   color: white;
   background: hsl(210, 100%, 50%);  
   border: none;
