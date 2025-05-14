@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Visualizations.module.css";
-import { db } from "../firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import styles from "./Visualization.module.css";
+import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -22,11 +21,12 @@ ChartJS.register(
   Legend
 );
 
-function Visualizations() {
+function Visualization() {
   const [workoutData, setWorkoutData] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState("");
   const [selectedTimeframe, setSelectedTimeframe] = useState("1m");
   const [chartData, setChartData] = useState({});
+  const db = getFirestore();
 
   const timeframeOptions = {
     "1m": 30,
@@ -149,4 +149,5 @@ function Visualizations() {
     </div>
   );
 }
-export default Visualizations;
+
+export default Visualization;
