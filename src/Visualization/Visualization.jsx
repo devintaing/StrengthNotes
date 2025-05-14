@@ -28,7 +28,7 @@ ChartJS.register(
 const Visualization = () => {
   const [workouts, setWorkouts] = useState([]);
   const [timespan, setTimespan] = useState('7');
-  const [selectedExercise, setSelectedExercise] = useState('Bench Press');
+  const [selectedExercise, setSelectedExercise] = useState('');
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -54,60 +54,85 @@ const Visualization = () => {
     cutoff.setHours(0, 0, 0, 0);
 
     if (timespan === '1') {
-      cutoff.setDate(now.getDate() - 1); // 1 day ago
+      cutoff.setDate(now.getDate());
     } else if (timespan === '7') {
-      cutoff.setDate(now.getDate() - 7); // 7 days ago
+      cutoff.setDate(now.getDate() - 7);
     } else if (timespan === '30') {
-      cutoff.setDate(now.getDate() - 30); // 30 days ago
+      cutoff.setDate(now.getDate() - 30);
     } else {
       return workouts;
     }
 
     return workouts.filter((workout) => {
       const workoutDate = new Date(workout.timeCompleted);
-      workoutDate.setHours(0, 0, 0, 0); 
+      workoutDate.setHours(0, 0, 0, 0);
       return workoutDate >= cutoff;
     });
   };
 
   const filteredWorkouts = filterByTimespan(workouts);
 
-  // Build PR progression data
+  // Aggregate PR data
   const prData = {};
 
   filteredWorkouts.forEach((workout) => {
-    const workoutDate = new Date(workout.timeCompleted).toLocaleDateString();
+    const workoutDate = new Date(workout.timeCompleted);
+    workoutDate.setHours(0, 0, 0, 0);
+    const dateKey = workoutDate.toLocaleDateString();
 
     if (workout.exercises) {
       workout.exercises.forEach((exercise) => {
         const { name, weight } = exercise;
-        if (!prData[name]) {
-          prData[name] = {};
-        }
+        if (!prData[name]) prData[name] = {};
 
         if (timespan === '1') {
-          if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
-            prData[name][workoutDate] = weight;
-          }
+          if (!prData[name][dateKey]) prData[name][dateKey] = [];
+          prData[name][dateKey].push(weight);
         } else {
-          if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
-            prData[name][workoutDate] = weight;
+          if (!prData[name][dateKey] || weight > prData[name][dateKey]) {
+            prData[name][dateKey] = weight;
           }
         }
       });
     }
   });
 
-  const exerciseDates = Object.keys(prData[selectedExercise] || {}).sort(
-    (a, b) => new Date(a) - new Date(b)
-  );
+  const exerciseOptions = Object.keys(prData);
+
+  useEffect(() => {
+    if (exerciseOptions.length > 0 && !exerciseOptions.includes(selectedExercise)) {
+      setSelectedExercise(exerciseOptions[0]);
+    }
+  }, [exerciseOptions, selectedExercise]);
+
+  let chartLabels = [];
+  let chartValues = [];
+
+  if (selectedExercise && prData[selectedExercise]) {
+    const exerciseDates = Object.keys(prData[selectedExercise]).sort(
+      (a, b) => new Date(a) - new Date(b)
+    );
+
+    exerciseDates.forEach((date) => {
+      const entry = prData[selectedExercise][date];
+      if (Array.isArray(entry)) {
+        entry.forEach((val) => {
+          chartLabels.push(date);
+          chartValues.push(val);
+        });
+      } else {
+        chartLabels.push(date);
+        chartValues.push(entry);
+      }
+    });
+  }
 
   const chartData = {
-    labels: exerciseDates,
+    labels: chartLabels,
     datasets: [
       {
         label: `${selectedExercise} PR (lbs)`,
-        data: exerciseDates.map((date) => prData[selectedExercise][date]),
+        data: chartValues,
         borderColor: 'rgba(255,99,132,1)',
         backgroundColor: 'rgba(255,99,132,0.2)',
         tension: 0.3,
@@ -124,13 +149,12 @@ const Visualization = () => {
     },
     scales: {
       y: {
+        min: chartValues.length ? Math.max(Math.min(...chartValues) - 5, 0) : 0,
+        max: chartValues.length ? Math.max(...chartValues) + 5 : 10,
         ticks: {
-          beginAtZero: true,
           callback: function (value) {
-            return value % 1 === 0 ? value : ''; 
+            return value % 1 === 0 ? `${value} lbs` : '';
           },
-          suggestedMin: Math.min(...exerciseDates.map((date) => prData[selectedExercise][date])) - 5,
-          suggestedMax: Math.max(...exerciseDates.map((date) => prData[selectedExercise][date])) + 5,
         },
       },
     },
@@ -156,7 +180,7 @@ const Visualization = () => {
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
           >
-            {Object.keys(prData).map((exerciseName) => (
+            {exerciseOptions.map((exerciseName) => (
               <option key={exerciseName} value={exerciseName}>
                 {exerciseName}
               </option>
