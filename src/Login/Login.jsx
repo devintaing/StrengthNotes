@@ -50,7 +50,7 @@ const Login = () => {
 
   const renderLoginForm = () => (
     <>
-      <form onSubmit={handleLogin} className={styles.authForm}>
+      <form onSubmit={handleLogin} className={`${styles.authForm} ${styles.fadeIn}`}>
         <h2 className={styles.authTitle}>Sign in</h2>
         <h3 className={styles.authSubtitle}>Log new workouts and view previous ones.</h3>
         {error && <p className={styles.error}>{error}</p>}
@@ -80,7 +80,7 @@ const Login = () => {
 
   const renderCreateAccountForm = () => (
     <>
-      <form onSubmit={handleCreateAccount} className={styles.authForm}>
+      <form onSubmit={handleCreateAccount} className={`${styles.authForm} ${styles.fadeIn}`}>
       <h2 className={styles.authTitle}>Create Account</h2>
       <h3 className={styles.authSubtitle}>Start logging and visualizing your workouts.</h3>
         {error && <p className={styles.error}>{error}</p>}
@@ -118,7 +118,7 @@ const Login = () => {
   return (
     <div>
       <Header />
-      <div className={styles.authDiv}>
+      <div className={styles.authDiv} key={isLogin ? 'login' : 'createAccount'}>
         {isLogin ? renderLoginForm() : renderCreateAccountForm()}
       </div>
     </div>
