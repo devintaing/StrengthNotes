@@ -1,153 +1,151 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Visualization.module.css";
-import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
-import { Line } from "react-chartjs-2";
+import React, { useState, useEffect } from 'react';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import Header from '../Header/Header';
+import styles from './Visualization.module.css';
 import {
   Chart as ChartJS,
-  LineElement,
   CategoryScale,
   LinearScale,
   PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend,
-} from "chart.js";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
-  LineElement,
   CategoryScale,
   LinearScale,
   PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend
 );
 
-function Visualization() {
-  const [workoutData, setWorkoutData] = useState([]);
-  const [selectedExercise, setSelectedExercise] = useState("");
-  const [selectedTimeframe, setSelectedTimeframe] = useState("1m");
-  const [chartData, setChartData] = useState({});
-  const db = getFirestore();
-
-  const timeframeOptions = {
-    "1m": 30,
-    "3m": 90,
-    "1y": 365,
-  };
+const Visualization = () => {
+  const [workouts, setWorkouts] = useState([]);
+  const [timespan, setTimespan] = useState('7');
+  const [selectedExercise, setSelectedExercise] = useState('Bench Press');
 
   useEffect(() => {
     const fetchWorkouts = async () => {
-      try {
-        const q = query(collection(db, "workouts"));
-        const querySnapshot = await getDocs(q);
-        const workouts = [];
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return;
 
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.exercise && data.weight && data.date) {
-            workouts.push({
-              exercise: data.exercise,
-              weight: data.weight,
-              date: data.date,
-            });
-          }
-        });
-
-        setWorkoutData(workouts);
-        if (workouts.length && !selectedExercise) {
-          setSelectedExercise(workouts[0].exercise);
-        }
-      } catch (error) {
-        console.error("Error fetching workouts:", error);
-      }
+      const db = getFirestore();
+      const workoutsRef = collection(db, 'users', user.uid, 'workouts');
+      const snapshot = await getDocs(workoutsRef);
+      const workoutsList = snapshot.docs.map((doc) => doc.data());
+      setWorkouts(workoutsList);
     };
 
     fetchWorkouts();
   }, []);
 
-  const getFilteredData = () => {
+  const filterByTimespan = (workouts) => {
     const now = new Date();
-    const days = timeframeOptions[selectedTimeframe];
+    const cutoff = new Date();
 
-    const filtered = workoutData
-      .filter((entry) => entry.exercise === selectedExercise)
-      .filter((entry) => {
-        const entryDate = new Date(entry.date);
-        const diffTime = Math.abs(now - entryDate);
-        const diffDays = diffTime / (1000 * 60 * 60 * 24);
-        return diffDays <= days;
-      });
+    if (timespan === '1') {
+      cutoff.setDate(now.getDate() - 1);
+    } else if (timespan === '7') {
+      cutoff.setDate(now.getDate() - 7);
+    } else if (timespan === '30') {
+      cutoff.setDate(now.getDate() - 30);
+    } else {
+      return workouts;
+    }
 
-    const grouped = {};
-    filtered.forEach((entry) => {
-      const monthKey = entry.date.slice(0, 7); // "YYYY-MM"
-      if (!grouped[monthKey] || entry.weight > grouped[monthKey]) {
-        grouped[monthKey] = entry.weight;
-      }
-    });
-
-    const sortedKeys = Object.keys(grouped).sort();
-    return {
-      labels: sortedKeys,
-      data: sortedKeys.map((k) => grouped[k]),
-    };
+    return workouts.filter((workout) => new Date(workout.timeCompleted) >= cutoff);
   };
 
-  useEffect(() => {
-    if (!selectedExercise || workoutData.length === 0) return;
+  const filteredWorkouts = filterByTimespan(workouts);
 
-    const { labels, data } = getFilteredData();
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: `Max Weight for ${selectedExercise}`,
-          data,
-          borderColor: "rgba(75, 192, 192, 1)",
-          fill: false,
-          tension: 0.2,
-        },
-      ],
-    });
-  }, [selectedExercise, selectedTimeframe, workoutData]);
+  // Build PR progression data
+  const prData = {};
 
-  const exercises = [...new Set(workoutData.map((w) => w.exercise))];
+  filteredWorkouts.forEach((workout) => {
+    const workoutDate = new Date(workout.timeCompleted).toLocaleDateString();
+
+    if (workout.exercises) {
+      workout.exercises.forEach((exercise) => {
+        const { name, weight } = exercise;
+        if (!prData[name]) {
+          prData[name] = {};
+        }
+
+        // Check if there's already a PR for that day or if this one is higher
+        if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
+          prData[name][workoutDate] = weight;
+        }
+      });
+    }
+  });
+
+  const exerciseDates = Object.keys(prData[selectedExercise] || {}).sort(
+    (a, b) => new Date(a) - new Date(b)
+  );
+
+  const chartData = {
+    labels: exerciseDates,
+    datasets: [
+      {
+        label: `${selectedExercise} PR (lbs)`,
+        data: exerciseDates.map((date) => prData[selectedExercise][date]),
+        borderColor: 'rgba(255,99,132,1)',
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        tension: 0.3,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  };
 
   return (
-    <div className={styles.container}>
-      <h1>Visualizations</h1>
-      <div style={{ marginBottom: "1rem" }}>
-        <label>Exercise: </label>
-        <select
-          value={selectedExercise}
-          onChange={(e) => setSelectedExercise(e.target.value)}
-        >
-          {exercises.map((exercise) => (
-            <option key={exercise} value={exercise}>
-              {exercise}
-            </option>
-          ))}
-        </select>
+    <div>
+      <Header />
+      <div className={styles.container}>
+        <h2>Personal Record Progression</h2>
 
-        <label style={{ marginLeft: "1rem" }}>Timeframe: </label>
-        <select
-          value={selectedTimeframe}
-          onChange={(e) => setSelectedTimeframe(e.target.value)}
-        >
-          <option value="1m">1 Month</option>
-          <option value="3m">3 Months</option>
-          <option value="1y">1 Year</option>
-        </select>
-      </div>
+        <div className={styles.timespanButtons}>
+          <button onClick={() => setTimespan('1')}>1 Day</button>
+          <button onClick={() => setTimespan('7')}>7 Days</button>
+          <button onClick={() => setTimespan('30')}>30 Days</button>
+          <button onClick={() => setTimespan('all')}>All</button>
+        </div>
 
-      <div>
-        {chartData.labels?.length ? (
-          <Line data={chartData} />
-        ) : (
-          <p> .</p>
-        )}
+        <div className={styles.exerciseSelect}>
+          <label htmlFor="exerciseSelect">Exercise:</label>
+          <select
+            id="exerciseSelect"
+            value={selectedExercise}
+            onChange={(e) => setSelectedExercise(e.target.value)}
+          >
+            {Object.keys(prData).map((exerciseName) => (
+              <option key={exerciseName} value={exerciseName}>
+                {exerciseName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.chartContainer}>
+          <Line data={chartData} options={chartOptions} />
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Visualization;
