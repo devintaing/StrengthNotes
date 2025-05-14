@@ -50,17 +50,24 @@ const Visualization = () => {
     const now = new Date();
     const cutoff = new Date();
 
+    now.setHours(0, 0, 0, 0);
+    cutoff.setHours(0, 0, 0, 0);
+
     if (timespan === '1') {
-      cutoff.setDate(now.getDate() - 1);
+      cutoff.setDate(now.getDate() - 1); // 1 day ago
     } else if (timespan === '7') {
-      cutoff.setDate(now.getDate() - 7);
+      cutoff.setDate(now.getDate() - 7); // 7 days ago
     } else if (timespan === '30') {
-      cutoff.setDate(now.getDate() - 30);
+      cutoff.setDate(now.getDate() - 30); // 30 days ago
     } else {
       return workouts;
     }
 
-    return workouts.filter((workout) => new Date(workout.timeCompleted) >= cutoff);
+    return workouts.filter((workout) => {
+      const workoutDate = new Date(workout.timeCompleted);
+      workoutDate.setHours(0, 0, 0, 0); 
+      return workoutDate >= cutoff;
+    });
   };
 
   const filteredWorkouts = filterByTimespan(workouts);
@@ -78,9 +85,14 @@ const Visualization = () => {
           prData[name] = {};
         }
 
-        // Check if there's already a PR for that day or if this one is higher
-        if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
-          prData[name][workoutDate] = weight;
+        if (timespan === '1') {
+          if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
+            prData[name][workoutDate] = weight;
+          }
+        } else {
+          if (!prData[name][workoutDate] || weight > prData[name][workoutDate]) {
+            prData[name][workoutDate] = weight;
+          }
         }
       });
     }
@@ -108,6 +120,18 @@ const Visualization = () => {
     plugins: {
       legend: {
         position: 'top',
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          beginAtZero: true,
+          callback: function (value) {
+            return value % 1 === 0 ? value : ''; 
+          },
+          suggestedMin: Math.min(...exerciseDates.map((date) => prData[selectedExercise][date])) - 5,
+          suggestedMax: Math.max(...exerciseDates.map((date) => prData[selectedExercise][date])) + 5,
+        },
       },
     },
   };
