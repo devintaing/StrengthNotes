@@ -8,6 +8,8 @@ import Home from './Home/Home';
 import Base from './Base/Base';
 import PrivateRoute from './PrivateRoute';
 import Workout from './Workout/Workout';
+import History from './History/History';
+import Visualization from './Visualization/Visualization';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,6 +18,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/workout" element={<PrivateRoute><Workout /></PrivateRoute>} />
+        <Route path="/history" element={<PrivateRoute><History /></PrivateRoute>} />
+        <Route path="/visualizations" element={<PrivateRoute><Visualization /></PrivateRoute>} />
         <Route path="/" element={<Base />} />
       </Routes>
     </Router>

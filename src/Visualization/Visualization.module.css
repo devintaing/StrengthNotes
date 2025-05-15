@@ -1,0 +1,45 @@
+.container {
+  padding: 2rem;
+}
+
+.timespanButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.timespanButtons button {
+  background-color: hsl(216, 100%, 50%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.timespanButtons button:hover {
+  background-color: hsl(216, 98%, 18%);
+}
+
+.exerciseSelect {
+  margin-bottom: 20px;
+}
+
+.exerciseSelect label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.exerciseSelect select {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.chartContainer {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
